@@ -1,0 +1,7 @@
+---
+
+- name: check disk status 
+  hosts: all
+  gather_facts: yes
+  roles:
+     - role_disk_space
