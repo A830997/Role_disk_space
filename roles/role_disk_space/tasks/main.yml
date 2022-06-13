@@ -1,2 +1,10 @@
 ---
-name: aaa
+
+- name: check disk status windows
+  win_shell: "chkdsk C:"
+  register: command_output
+  become_method: runas
+    
+- debug:
+   msg: 
+   - "{{ command_output }}"
