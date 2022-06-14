@@ -1,6 +1,6 @@
 ---
  
- - name: get disk free space
+- name: get disk free space
   win_shell: Get-PsDrive | ConvertTo-Json
   register: output
 
