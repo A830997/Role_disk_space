@@ -1,13 +1,8 @@
 ---
  
-- name: get disk free space
-  win_shell: Get-PsDrive | ConvertTo-Json
-  register: output
+  - name: Get disk facts
+    win_disk_facts:
 
-- name: extract free space
-  set_fact:
-    free_json: "{{ output.stdout|from_json}}"
-
-- name:
-  debug:
-    var: free_json
+  - name: Initialize Disk
+    win_shell: "Initialize-Disk -Number {{ disk_number }}"
+    when: ansible_disks[disk_number].guid is none
