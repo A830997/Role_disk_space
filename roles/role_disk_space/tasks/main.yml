@@ -6,3 +6,10 @@
   - name: Initialize Disk
     win_shell: "Initialize-Disk -Number {{ disk_number }}"
     when: ansible_disks[disk_number].guid is none
+    
+  - name: Create Partition using all available space
+    win_partition:
+      drive_letter: "{{ drive_letter }}"
+      partition_size: -1
+      disk_number: "{{ disk_number }}"
+    when: ansible_disks[disk_number].guid is none
