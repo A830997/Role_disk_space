@@ -1,10 +1,13 @@
 ---
 
-- name: check disk status windows
-  win_shell: "chkdsk C:"
-  register: command_output
-  become_method: runas
+  - name: Retrieve Disk Usage
+    win_shell: 'Get-PSDrive | Select-Object Free'
+    register: rawcsize
     
-- debug:
-   msg: 
-   - "{{ command_output }}"
+  - name: Convert system disk into various formats and export
+    vars:
+      disk_out_free: '{{ rawcsize.stdout[0] }}'
+      disk_int: '{{ rawcsize.stdout | int }}'
+      disk_gb: '{{ disk_int | int}}'
+    debug:
+      msg: 'rawcsize.stdout: {{(rawcsize.stdout)}} disk_out_free: {{(disk_out_free)}}  disk_int: {{(disk_int)}} disk_gb: {{(disk_gb)}}'
