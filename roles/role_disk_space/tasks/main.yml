@@ -1,13 +1,13 @@
 ---
+ 
+ - name: get disk free space
+  win_shell: Get-PsDrive | ConvertTo-Json
+  register: output
 
-  - name: Retrieve Disk Usage
-    win_shell: 'Get-PSDrive | Select-Object Free'
-    register:  {{ "rawcsize" }}
-    
-  - name: Convert system disk into various formats and export
-    vars:
-      disk_out_free: '{{ rawcsize.stdout[0] }}'
-      disk_int: '{{ rawcsize.stdout | int }}'
-      disk_gb: '{{ disk_int | int}}'
-    debug:
-      msg: disk_gb.stdout
+- name: extract free space
+  set_fact:
+    free_json: "{{ output.stdout|from_json}}"
+
+- name:
+  debug:
+    var: free_json.Free
