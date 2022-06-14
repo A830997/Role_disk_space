@@ -10,4 +10,4 @@
       disk_int: '{{ rawcsize.stdout | int }}'
       disk_gb: '{{ disk_int | int}}'
     debug:
-      msg: rawcsize.stdout_lines
+      msg: disk_gb.stdout
