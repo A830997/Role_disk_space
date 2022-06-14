@@ -1,15 +1,24 @@
 ---
  
-  - name: Get disk facts
-    win_disk_facts:
+   - name: Retrieve Disk Usage
+    win_shell: 'Get-PSDrive C | Select-Object Free'
+    register: rawcsize
 
-  - name: Initialize Disk
-    win_shell: "Initialize-Disk -Number {{ disk_number }}"
-    when: ansible_disks[disk_number].guid is none
+   - name: extract free space
+     set_fact:
+     free_json: "{{ output.stdout|from_json}}"
+
+   - name:
+     debug:
+       var: free_json.Free
     
-  - name: Create Partition using all available space
-    win_partition:
-      drive_letter: "{{ drive_letter }}"
-      partition_size: -1
-      disk_number: "{{ disk_number }}"
-    when: ansible_disks[disk_number].guid is none
+#  # Convert disk size in Gigabytes
+  - name: Convert system disk into various formats and export
+    vars:
+      disk_int: '{{ rawcsize.stdout | int }}'
+      disk_gb: '{{ disk_int | int}}'
+    debug:
+      msg: 'rawcsize.stdout: {{(rawcsize.stdout)}} disk_int: {{(disk_int)}} disk_gb: {{(disk_gb)}}'
+      
+
+- 
