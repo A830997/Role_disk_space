@@ -8,16 +8,12 @@
     var: ansible_facts.disks[0].size
     
 - name: get disk free space
-  win_shell: Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name="Free Space(GB)";Expression={$_.freespace/1gb}}, DriveType | Where-Object DriveType -EQ '0' | ConvertTo-Json
+  win_shell: Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name="Free Space(GB)";Expression={$_.freespace/1gb}}, DriveType | Where-Object DriveType -EQ '0' 
   register: output
-
-- name: extract free space
-  set_fact:
-    free_json: "{{ output.stdout|from_json}}"
   
-- name:
+- name: extract
   debug:
-    var: free_json
+    var: output
     
     
         
