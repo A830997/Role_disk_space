@@ -8,13 +8,13 @@
     var: ansible_facts.disks[0].size
     
 - name: get disk free space
-  win_shell: Get-PsDrive | select-object Free | ConvertTo-Json
+  win_shell: Get-Disk | select-object Free | ConvertTo-Json
   register: output
 
 - name: extract free space
   set_fact:
     free_json: "{{ output.stdout|from_json}}"
   debug:
-    var: free_json.free
+    var: free_json.
         
 
