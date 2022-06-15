@@ -1,8 +1,8 @@
 ---
 
-- name: facts
-  set_fact:
-    mount: "{{ ansible_mounts | first }}"
-    disk_usage="{{ mount.size_total - mount.size_available }}"
+- name: Get disk facts
+  win_disk_facts:
+
+- name: Output first disk size
   debug:
-     - msg: disk_usage.stdout
+    var: ansible_facts.disks[0].size
