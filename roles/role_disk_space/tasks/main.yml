@@ -1,11 +1,8 @@
- - name: Retrieve Disk Usage
-    win_shell: 'Get-PSDrive C | Select-Object Free'
-    register: rawcsize
+---
 
- - name: Convert system disk into various formats and export
-   vars:
-     disk_out_free: '{{ rawcsize.stdout[0] }}'
-     disk_int: '{{ rawcsize.stdout | int }}'
-     disk_gb: '{{ disk_int | int}}'
-   debug:
-     msg: 'rawcsize.stdout: {{(rawcsize.stdout)}} disk_out_free: {{(disk_out_free)}}  disk_int: {{(disk_int)}} disk_gb: {{(disk_gb)}}'
+- name: facts
+  set_fact:
+    mount: "{{ ansible_mounts | first }}"
+    disk_usage="{{ mount.size_total - mount.size_available }}"
+  debug:
+    msg: disk_usage.stdout
