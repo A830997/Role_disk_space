@@ -17,6 +17,6 @@
   
 - name:
   debug:
-    var: free_json.
+    var: free_json
         
 
