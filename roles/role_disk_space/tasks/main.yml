@@ -9,7 +9,6 @@
     
 - name: get disk free space
   win_shell: Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name="Free Space(GB)";Expression={$_.freespace/1gb}}, DriveType | Where-Object DriveType -EQ '0' | ConvertTo-Json
-  #win_shell: Get-Volumn | select-object SizeRemaining | ConvertTo-Json
   register: output
 
 - name: extract free space
