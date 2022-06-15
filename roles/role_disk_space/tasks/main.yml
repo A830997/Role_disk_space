@@ -14,9 +14,7 @@
 - name: extract free space
   set_fact:
     free_json: "{{ output.stdout|from_json}}"
-
-- name:
   debug:
-    var: free_json
+    var: free_json.free
         
 
