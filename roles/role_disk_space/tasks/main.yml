@@ -17,6 +17,6 @@
 
 - name:
   debug:
-    var: free_json.disks[0].size
+    var: free_json
         
 
