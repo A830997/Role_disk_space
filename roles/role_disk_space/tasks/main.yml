@@ -1,7 +1,7 @@
 ---
 
 - name: facts
-   set_fact:
+  set_fact:
     mount: "{{ ansible_mounts | first }}"
     disk_usage="{{ mount.size_total - mount.size_available }}"
     debug:
