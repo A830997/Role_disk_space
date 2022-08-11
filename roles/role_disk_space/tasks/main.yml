@@ -7,13 +7,7 @@
   register: inputList
   delegate_to: localhost
 
- #- debug: 
- #   msg: "{{ inputList }}"
-
-  #when: snap_output.changed == False
- 
-# tasks file for role_get_cluster_info
-- name: Login into vCenter and get cookies
+- name: Login into vCenter 
   uri:
      url: https://{{ vcenter_hostname }}/rest/com/vmware/cis/session
      force_basic_auth: yes
@@ -22,18 +16,6 @@
      user: "{{ vcenter_username }}"
      password: "{{ vcenter_password }}"
   register: login
-
-- name: Get all hosts from vCenter using cookies from last task
-  uri:
-   url: https://{{ vcenter_hostname }}/rest/vcenter/host
-   force_basic_auth: yes
-   validate_certs: no
-   headers:
-     Cookie: "{{ login.set_cookie }}"
-  register: vchosts
-
-
-# - debug: msg="{{ vchosts }}"
 
 - name: Get datacenters from vCenter
   uri:
@@ -70,9 +52,7 @@
   set_fact: 
    datastore_name: "{{ datastore_name + [item.name] }}"
   with_items: "{{ info.datastores }}"
- # when: (item.name| string).find('Gold') != -1
-  loop_control:
-   label: " "
+ 
 
 
         
