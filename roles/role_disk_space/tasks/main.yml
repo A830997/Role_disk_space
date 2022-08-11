@@ -1,20 +1,79 @@
 ---
 
-- name: Get disk facts
-  win_disk_facts:
+- name: Read server details from CSV file
+  read_csv:
+     path: /tmp/output.csv
+     key: 'configuration_item'
+  register: inputList
+  delegate_to: localhost
 
-- name: Output first disk size
+ #- debug: 
+ #   msg: "{{ inputList }}"
+
+  #when: snap_output.changed == False
+ 
+# tasks file for role_get_cluster_info
+- name: Login into vCenter and get cookies
+  uri:
+     url: https://{{ vcenter_hostname }}/rest/com/vmware/cis/session
+     force_basic_auth: yes
+     validate_certs: no
+     method: POST
+     user: "{{ vcenter_username }}"
+     password: "{{ vcenter_password }}"
+  register: login
+
+- name: Get all hosts from vCenter using cookies from last task
+  uri:
+   url: https://{{ vcenter_hostname }}/rest/vcenter/host
+   force_basic_auth: yes
+   validate_certs: no
+   headers:
+     Cookie: "{{ login.set_cookie }}"
+  register: vchosts
+
+
+# - debug: msg="{{ vchosts }}"
+
+- name: Get datacenters from vCenter
+  uri:
+   url: https://{{ vcenter_hostname }}/rest/vcenter/datacenter
+   force_basic_auth: yes
+   validate_certs: no
+   headers:
+     Cookie: "{{ login.set_cookie }}"
+  register: vDatacenters
+
+- name: Print names of datacenters in the given vCenter
   debug:
-    var: ansible_facts.disks[0].size
-    
-- name: get disk free space
-  win_shell: Get-CimInstance -Class CIM_LogicalDisk | Select-Object @{Name="Free Space(GB)";Expression={$_.freespace/1gb}}, DriveType | Where-Object DriveType -EQ '0' 
-  register: output
-  
-- name: extract
-  debug:
-    var: output
-    
-    
+   msg: "{{ item.name }}"
+  with_items: "{{ vDatacenters.json.value }}" 
+
+- set_fact:
+   data_center: "{{ item.name }}"
+  with_items: "{{ vDatacenters.json.value }}"
+
+- debug: msg="{{ data_center }}"
+
+
+- name: Gather datastore details
+  vmware_datastore_facts:
+   hostname: "{{ vcenter_hostname }}"
+   username: "{{ vcenter_username }}"
+   password: "{{ vcenter_password }}"
+   validate_certs: no
+   datacenter: "{{ data_center }}"
+  register: info
+
+
+- name: Get Datastore Name
+  set_fact: 
+   datastore_name: "{{ datastore_name + [item.name] }}"
+  with_items: "{{ info.datastores }}"
+ # when: (item.name| string).find('Gold') != -1
+  loop_control:
+   label: " "
+
+
         
 
