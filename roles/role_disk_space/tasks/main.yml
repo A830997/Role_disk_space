@@ -10,7 +10,8 @@
 - name: Login into vCenter 
   read_csv:
      path: roles/role_disk_space/vars/vcenter.csv
-     key: 'URL'
+     fieldnames: URL,vcenter_name
+     delimiter: ','
      user: "{{ vcenter_username }}"
      password: "{{ vcenter_password }}"
   register: login
