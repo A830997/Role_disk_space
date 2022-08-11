@@ -1,3 +1,3 @@
-Env,Configuration item,App ,Owner,OS Version,Rebooted,Yum Command Used + Exclusions,IP address
-Test,INWDemo-115,AHS,test@atos.net,,,,192.168.90.115
-Test,INWDemo-17,AHS,test@atos.net,,,,192.168.90.117
+vcenter_name,URL
+10.99.22.70,https://10.99.22.70/ui/#?extensionId=vsphere.core.vm.summary&objectId=urn:vmomi:VirtualMachine:vm-30161:CAA98695-5946-41FC-832F-25A44F19F27E&navigator=vsphere.core.viTree.vmsAndTemplatesView
+
