@@ -3,7 +3,7 @@
 - name: Read server details from CSV file
   read_csv:
      path: roles/role_disk_space/vars/input.csv
-     key: 'configuration item'
+     key: 'Configuration item'
   register: inputList
   delegate_to: localhost
 
